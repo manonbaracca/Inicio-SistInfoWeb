@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="assets/images/logo.png" alt="Logo" class="login-logo">
+            <h2 class="login-title">Verificar OTP</h2>
+            <form id="otpForm">
+                <input type="text" name="otp" class="input-field" placeholder="Ingrese su OTP" required />
+                <input type="submit" class="btn login-btn" value="Verificar OTP">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const otpForm = document.getElementById('otpForm');
+
+            otpForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Previene el comportamiento por defecto del formulario
+
+                const otp = otpForm.elements['otp'].value;
+                const email = localStorage.getItem('userEmail'); // Asegúrate de haber guardado el email del usuario previamente
+
+                // Asegúrate de que esta ruta coincida con la ruta de verificación de tu servidor
+                fetch('http://localhost:4000/api/otp/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, otp }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('OTP incorrecto o ha ocurrido un error.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Suponiendo que la respuesta del servidor es { valid: true } para un OTP válido
+                    if (data.valid) {
+                        window.location.href = 'welcome.html'; // Redirige al usuario a la página de bienvenida
+                    } else {
+                        throw new Error('OTP inválido, intente de nuevo.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert(error.message); // Muestra un mensaje de alerta con el error
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #F8F8F8; /* Light background */
+    color: #333; /* Dark text */
+}
+
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
+.header {
+    margin-bottom: 50px;
+}
+
+.logo {
+    height: 50px; /* Example size, adjust as needed */
+    margin-right: 20px; /* Gives some space between logo and title */
+}
+
+.title {
+    font-size: 2.5em;
+    color: #FF4500; /* Color for the title */
+}
+
+.apps {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Space between the app icons */
+}
+
+.app {
+    width: 150px; /* Width of the app blocks */
+    padding: 20px;
+    border: 1px solid #ddd; /* Border for the app blocks */
+    border-radius: 10px; /* Rounded corners */
+    background: #FFF; /* White background for app blocks */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Shadow for depth */
+    transition: transform 0.3s ease;
+}
+
+.app:hover {
+    transform: scale(1.05); /* Slightly scale app blocks on hover */
+}
+
+.app-logo {
+    max-width: 100%; /* Make sure the image is responsive */
+    height: auto;
+}
+
+.app p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.logout-button {
+    padding: 10px 20px;
+    background-color: #FF4500; /* Color that matches the theme */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    position: absolute; /* Positioning it absolutely */
+    top: 10px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #E63900; /* Darker shade on hover */
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+.title-container {
+    width: 100%; /* Full width to center the title */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

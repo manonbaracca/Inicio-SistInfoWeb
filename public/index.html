@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Laboratorio</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Previene el comportamiento por defecto del formulario
+
+        const usuario = loginForm.usuario.value;
+        const password = loginForm.password.value;
+
+        // Primero verifica el email y la contraseña
+        fetch('http://localhost:4000/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ usuario, password }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Email no registrado o contraseña incorrecta.');
+            }
+            return response.json(); // Aquí se podría retornar un token de autenticación o alguna señal de login exitoso
+        })
+        .then(data => {
+            // Si el login es exitoso, almacena el token y el email del usuario
+            localStorage.setItem('token', data.token); // Guarda el token en localStorage
+            localStorage.setItem('userEmail', usuario); // Guarda el email del usuario
+
+            // Llama a la API para enviar el OTP al email del usuario
+            return fetch('http://localhost:4000/api/otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + data.token // Enviar el token de autenticación si es necesario
+                },
+                body: JSON.stringify({ email: usuario, subject: "Your OTP", message: "Your OTP is: ", duration: 1 }),
+            });
+        })
+        .then(otpResponse => {
+            if (!otpResponse.ok) {
+                throw new Error('No se pudo enviar el OTP.');
+            }
+            return otpResponse.json(); // Respuesta del envío del OTP
+        })
+        .then(otpData => {
+            console.log('OTP enviado: ', otpData);
+            window.location.href = 'otp.html'; // Redirige al usuario a la página para ingresar el OTP
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert(error.message); // Muestra un mensaje de alerta con el error
+        });
+    });
+});
+ 
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="assets/images/logo.png" alt="Logo" class="login-logo">
+            <h2 class="login-title">Bienvenido</h2>
+            <form id="loginForm" class="login-form">
+                <input type="email" name="usuario" class="input-field" placeholder="Email" required />
+                <input type="password" name="password" class="input-field" placeholder="Contraseña" required />
+                <input type="submit" class="btn login-btn" value="LOGIN">
+            </form>
+        </div>
+    </div>
+    <script src="assets/script.js"></script>
+</body>
